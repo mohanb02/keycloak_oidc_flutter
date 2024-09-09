@@ -9,7 +9,7 @@ class OIDCClient {
 
   final String _clientId;
   final String _clientSecret;
-  final  Uri discoveryUri = Uri.parse("http://localhost:8080/realms/master"); //To-Do : to externalize
+  final  Uri discoveryUri = Uri.parse("http://enow2:8080/realms/master"); //To-Do : to externalize
   var scopes = ['openid', 'profile', 'basic', 'email', 'offline_access'];
 
   //Client? _client;

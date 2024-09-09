@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var oidcClient = OIDCClient.getInstance("openid-client-flutter", "FEAawFt0QQh9QNFujT9xdqYn12NdQnJ9");
+  var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
   UserInfo? userInfo ;
 
   @override

@@ -2,45 +2,51 @@
 import 'package:flutter/material.dart';
 import 'package:openid_client/openid_client.dart';
 import 'oidc_client_singleton.dart';
-///import 'package:openid_client/src/model.dart';
-
-
 
 Future<void> main() async {
   print ("Inside main");
-  runApp(const MyApp());
+  var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
+  UserInfo? userInfo = await oidcClient.getUserInfo();
+
+  if (userInfo == null){
+    oidcClient.authenticate();
+  } else {
+    runApp( MyApp(userInfo: userInfo));
+  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+    UserInfo userInfo;
+    MyApp({super.key, required this.userInfo});
+     //MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       title: 'openid_client demo',
-      home: MyHomePage(title: 'openid_client Demo Home Page'),
+      home: MyHomePage(title: 'openid_client Demo Home Page',userInfo: userInfo,),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+   MyHomePage({super.key, required this.title, required this.userInfo});
 
-  final String title;
+   String title;
+   UserInfo? userInfo;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
-  UserInfo? userInfo ;
-
+  
   @override
   void initState() {
     print("Inside initState()");
     //oidcClient.getUserInfo().then((value) => userInfo = value);
-    _getUserInfo();
+    
     super.initState();
   }
 
@@ -57,24 +63,25 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            if (userInfo != null) ...[
-              Text('Hello ${userInfo!.name}'),
-              Text(userInfo!.email ?? ''),
+            if (widget.userInfo != null) ...[
+              Text('Hello ${widget.userInfo!.name}'),
+              Text(widget.userInfo!.email ?? ''),
               OutlinedButton(
                   child: const Text('Logout'),
                   onPressed: () async {
                     setState(() {
-                      userInfo = null;
+                      widget.userInfo = null;
                     });
+                    var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
                     oidcClient.logOut();
                     
                   })
             ],
-            if (userInfo == null)
+            if (widget.userInfo == null)
               OutlinedButton(
                   child: const Text('Login'),
                   onPressed: () async {
-                     oidcClient.authenticate();
+                     //oidcClient.authenticate();
                      
                     /* setState(() {
                       oidcClient.getUserInfo().then((value) => userInfo = value);
@@ -85,11 +92,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  Future<void> _getUserInfo() async {
-      var userInf = await oidcClient.getUserInfo();
-      setState(() {
-        userInfo = userInf;
-      });
-    } 
+ 
 }

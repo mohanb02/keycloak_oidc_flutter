@@ -11,13 +11,15 @@ Future<void> main() async {
   if (userInfo == null){
     oidcClient.authenticate();
   } else {
-    runApp( MyApp(userInfo: userInfo));
+    runApp( MyApp(userInfo: userInfo, oidcClient: oidcClient));
   }
 }
 
 class MyApp extends StatelessWidget {
     UserInfo userInfo;
-    MyApp({super.key, required this.userInfo});
+    OIDCClient oidcClient;
+
+    MyApp({super.key, required this.userInfo, required this.oidcClient});
      //MyApp({super.key});
 
 
@@ -25,16 +27,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       title: 'openid_client demo',
-      home: MyHomePage(title: 'openid_client Demo Home Page',userInfo: userInfo,),
+      home: MyHomePage(title: 'openid_client Demo Home Page',userInfo: userInfo, oidcClient: oidcClient),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-   MyHomePage({super.key, required this.title, required this.userInfo});
+   MyHomePage({super.key, required this.title, required this.userInfo, required this.oidcClient});
 
    String title;
    UserInfo? userInfo;
+   OIDCClient? oidcClient;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -72,8 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       widget.userInfo = null;
                     });
-                    var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
-                    oidcClient.logOut();
+                    //var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
+                    widget.oidcClient!.logOut();
                     
                   })
             ],

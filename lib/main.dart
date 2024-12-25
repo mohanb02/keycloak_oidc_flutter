@@ -5,7 +5,7 @@ import 'oidc_client_singleton.dart';
 
 Future<void> main() async {
   print ("Inside main");
-  var oidcClient = OIDCClient.getInstance("slic_inc", "QBd3d7eCAkg06BNIJ6OMtFDsoxjS4K1P");
+  var oidcClient = OIDCClient.getInstance("slic_inc", "dPgfAjGe1NxV0cFlqgsb3d6dBH485lNA");
   UserInfo? userInfo = await oidcClient.getUserInfo();
 
   if (userInfo == null){
